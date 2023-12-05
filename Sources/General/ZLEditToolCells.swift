@@ -32,7 +32,7 @@ class ZLEditToolCell: UICollectionViewCell {
             switch toolType {
             case .draw:
                 icon.image = .zl.getImage("zl_drawLine")
-                icon.highlightedImage = .zl.getImage("zl_drawLine_selected")
+                icon.highlightedImage = .zl.getImage("zl_drawLine_selected")?.tintColor(.init(hex: 0xEA0E0E))
             case .clip:
                 icon.image = .zl.getImage("zl_clip")
                 icon.highlightedImage = .zl.getImage("zl_clip")
@@ -44,13 +44,13 @@ class ZLEditToolCell: UICollectionViewCell {
                 icon.highlightedImage = .zl.getImage("zl_textSticker")
             case .mosaic:
                 icon.image = .zl.getImage("zl_mosaic")
-                icon.highlightedImage = .zl.getImage("zl_mosaic_selected")
+                icon.highlightedImage = .zl.getImage("zl_mosaic_selected")?.tintColor(.init(hex: 0xEA0E0E))
             case .filter:
                 icon.image = .zl.getImage("zl_filter")
-                icon.highlightedImage = .zl.getImage("zl_filter_selected")
+                icon.highlightedImage = .zl.getImage("zl_filter_selected")?.tintColor(.init(hex: 0xEA0E0E))
             case .adjust:
                 icon.image = .zl.getImage("zl_adjust")
-                icon.highlightedImage = .zl.getImage("zl_adjust_selected")
+                icon.highlightedImage = .zl.getImage("zl_adjust_selected")?.tintColor(.init(hex: 0xEA0E0E))
             }
             if let color = UIColor.zl.toolIconHighlightedColor {
                 icon.highlightedImage = icon.highlightedImage?
@@ -163,7 +163,7 @@ class ZLAdjustToolCell: UICollectionViewCell {
     lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.frame = CGRect(x: 0, y: bounds.height - 30, width: bounds.width, height: 30)
-        label.font = .systemFont(ofSize: 12)
+        label.font = .systemFont(ofSize: 10)
         label.textColor = .white
         label.textAlignment = .center
         label.numberOfLines = 2
@@ -189,15 +189,15 @@ class ZLAdjustToolCell: UICollectionViewCell {
             switch adjustTool {
             case .brightness:
                 imageView.image = .zl.getImage("zl_brightness")
-                imageView.highlightedImage = .zl.getImage("zl_brightness_selected")
+                imageView.highlightedImage = .zl.getImage("zl_brightness_selected")?.tintColor(.init(hex: 0xEA0E0E))
                 nameLabel.text = localLanguageTextValue(.brightness)
             case .contrast:
                 imageView.image = .zl.getImage("zl_contrast")
-                imageView.highlightedImage = .zl.getImage("zl_contrast_selected")
+                imageView.highlightedImage = .zl.getImage("zl_contrast_selected")?.tintColor(.init(hex: 0xEA0E0E))
                 nameLabel.text = localLanguageTextValue(.contrast)
             case .saturation:
                 imageView.image = .zl.getImage("zl_saturation")
-                imageView.highlightedImage = .zl.getImage("zl_saturation_selected")
+                imageView.highlightedImage = .zl.getImage("zl_saturation_selected")?.tintColor(.init(hex: 0xEA0E0E))
                 nameLabel.text = localLanguageTextValue(.saturation)
             }
             if let color = UIColor.zl.toolIconHighlightedColor {

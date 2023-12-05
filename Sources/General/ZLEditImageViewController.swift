@@ -36,7 +36,7 @@ public struct ZLAdjustStatus {
     var brightness: Float = 0
     var contrast: Float = 0
     var saturation: Float = 0
-
+    
     var allValueIsZero: Bool {
         brightness == 0 && contrast == 0 && saturation == 0
     }
@@ -124,7 +124,7 @@ open class ZLEditImageViewController: UIViewController {
         layer.locations = [0, 1]
         return layer
     }()
-     
+    
     open lazy var bottomShadowView = UIView()
     
     open lazy var bottomShadowLayer: CAGradientLayer = {
@@ -232,7 +232,7 @@ open class ZLEditImageViewController: UIViewController {
         imageView.isHidden = true
         return imageView
     }()
-
+    
     
     open lazy var ashbinView: UIView = {
         let view = UIView()
@@ -313,19 +313,19 @@ open class ZLEditImageViewController: UIViewController {
     var shouldLayout = true
     
     var imageStickerContainerIsHidden = true
-
+    
     var fontChooserContainerIsHidden = true
     
     private var currentClipStatus: ZLClipStatus
-
+    
     private var preClipStatus: ZLClipStatus
-
+    
     private var preStickerState: ZLBaseStickertState?
-
+    
     private var currentAdjustStatus: ZLAdjustStatus
-
+    
     private var preAdjustStatus: ZLAdjustStatus
-
+    
     private var editorManager: ZLEditorManager
     
     private lazy var deleteDrawPaths: [ZLDrawPath] = []
@@ -519,8 +519,10 @@ open class ZLEditImageViewController: UIViewController {
                 limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 28)
             ).width
         cancelBtn.frame = CGRect(x: 20, y: 60, width: cancelBtnW, height: 30)
-        redoBtn.frame = CGRect(x: view.zl.width - 15 - 30, y: 60, width: 30, height: 30)
-        undoBtn.frame = CGRect(x: redoBtn.zl.left - 15 - 30, y: 60, width: 30, height: 30)
+        
+        let centerX = view.zl.width / 2
+        redoBtn.frame = CGRect(x: centerX + 5, y: 60, width: 30, height: 30)
+        undoBtn.frame = CGRect(x: centerX - 30 - 5, y: 60, width: 30, height: 30)
         
         eraserBtn.frame = CGRect(x: 20, y: 30 + (drawColViewH - 36) / 2, width: 36, height: 36)
         eraserBtnBgBlurView.frame = eraserBtn.frame
@@ -560,9 +562,9 @@ open class ZLEditImageViewController: UIViewController {
         
         let doneBtnH = ZLImageEditorLayout.bottomToolBtnH
         let doneBtnW = localLanguageTextValue(.editFinish).zl.boundingRect(font: ZLImageEditorLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: doneBtnH)).width + 20
-        doneBtn.frame = CGRect(x: view.zl.width - 20 - doneBtnW, y: toolY - 2, width: doneBtnW, height: doneBtnH)
+        doneBtn.frame = CGRect(x: view.zl.width - 20 - doneBtnW, y: 60, width: doneBtnW, height: 30)
         
-        editToolCollectionView.frame = CGRect(x: 20, y: toolY, width: view.zl.width - 20 - 20 - doneBtnW - 20, height: 30)
+        editToolCollectionView.frame = CGRect(x: 20, y: toolY, width: view.zl.width - 20 - 20, height: 30)
         
         if !drawPaths.isEmpty {
             drawLine()
@@ -575,7 +577,7 @@ open class ZLEditImageViewController: UIViewController {
             drawColorCollectionView?.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
         }
     }
-
+    
     override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         shouldLayout = true
@@ -664,11 +666,12 @@ open class ZLEditImageViewController: UIViewController {
         topShadowView.addSubview(cancelBtn)
         topShadowView.addSubview(undoBtn)
         topShadowView.addSubview(redoBtn)
+        topShadowView.addSubview(doneBtn)
         
         view.addSubview(bottomShadowView)
         bottomShadowView.layer.addSublayer(bottomShadowLayer)
         bottomShadowView.addSubview(editToolCollectionView)
-        bottomShadowView.addSubview(doneBtn)
+        //bottomShadowView.addSubview(doneBtn)
         
         if tools.contains(.draw) {
             bottomShadowView.addSubview(eraserBtnBgBlurView)
@@ -677,7 +680,7 @@ open class ZLEditImageViewController: UIViewController {
             containerView.addSubview(eraserCircleView)
             
             impactFeedback = UIImpactFeedbackGenerator(style: .light)
-
+            
             let drawColorLayout = UICollectionViewFlowLayout()
             let drawColorItemWidth: CGFloat = 36
             drawColorLayout.itemSize = CGSize(width: drawColorItemWidth, height: drawColorItemWidth)
@@ -810,13 +813,13 @@ open class ZLEditImageViewController: UIViewController {
                 self?.addImageStickerView(image)
             }
         }
-
+        
         if tools.contains(.textSticker) {
             ZLImageEditorConfiguration.default().fontChooserContainerView?.hideBlock = { [weak self] in
                 self?.setToolView(show: true)
                 self?.fontChooserContainerIsHidden = true
             }
-
+            
             ZLImageEditorConfiguration.default().fontChooserContainerView?.selectFontBlock = { [weak self] font in
                 self?.showInputTextVC(font: font, completion: { [weak self] text, textColor, font, image, style in
                     self?.addTextStickersView(text, textColor: textColor, font: font, image: image, style: style)
@@ -842,7 +845,15 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     @objc func cancelBtnClick() {
-        dismiss(animated: animateDismiss, completion: nil)
+        let alert = UIAlertController(title: "Are you sure you want to exit?",
+                                      message: nil,
+                                      preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { _ in
+            self.dismiss(animated: self.animateDismiss, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
+        present(alert, animated: true)
     }
     
     func drawBtnClick() {
@@ -1146,7 +1157,7 @@ open class ZLEditImageViewController: UIViewController {
                     ratio: ratio / originalRatio / toImageScale,
                     startPoint: point
                 )
-
+                
                 drawPaths.append(path)
             } else if pan.state == .changed {
                 let path = drawPaths.last

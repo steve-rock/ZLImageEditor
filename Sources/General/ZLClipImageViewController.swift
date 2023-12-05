@@ -323,7 +323,8 @@ class ZLClipImageViewController: UIViewController {
         revertBtn.addTarget(self, action: #selector(revertBtnClick), for: .touchUpInside)
         bottomToolView.addSubview(revertBtn)
         
-        doneBtn.setImage(.zl.getImage("zl_right"), for: .normal)
+        let image = UIImage.zl.getImage("zl_right")?.tintColor(.init(hex: 0xEA0E0E))
+        doneBtn.setImage(image, for: .normal)
         doneBtn.adjustsImageWhenHighlighted = false
         doneBtn.enlargeInset = 20
         doneBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
